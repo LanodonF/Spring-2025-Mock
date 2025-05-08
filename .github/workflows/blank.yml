@@ -1,0 +1,42 @@
+name: Discord Commit Notification
+
+on:
+  push:
+    branches:
+      - main # Or the branch you want to track (e.g., master, develop)
+
+jobs:
+  send_notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+          COMMIT_SHA=$(git log -1 --pretty=%h)
+          COMMIT_URL="${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+          REPOSITORY_NAME="${{ github.repository }}"
+
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{
+            \"content\": null,
+            \"embeds\": [
+              {
+                \"title\": \"New Commit to ${REPOSITORY_NAME}\",
+                \"description\": \"${COMMIT_MESSAGE}\",
+                \"color\": 3066993,
+                \"author\": {
+                  \"name\": \"${COMMIT_AUTHOR}\"
+                },
+                \"url\": \"${COMMIT_URL}\",
+                \"footer\": {
+                  \"text\": \"Commit: ${COMMIT_SHA}\"
+                },
+                \"timestamp\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"
+              }
+            ]
+          }" \
+          ${DISCORD_WEBHOOK_URL}
