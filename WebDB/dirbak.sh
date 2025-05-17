@@ -11,6 +11,7 @@ install_packages() {
         echo "Detected Red Hat-based system. Installing missing packages..."
         sudo dnf install -y gnupg tar
     elif [ -f /etc/debian_version ]; then
+        echo "Detected Debian-based system. Installing missing packages..."
         sudo apt update && sudo apt install -y gnupg tar
     else
         echo "Unsupported OS. Please install 'gnupg' and 'tar' manually."
