@@ -5,7 +5,7 @@
 
 # Get IP, Subnet, Gateway, DNS, MAC
 Write-Output "Run under $(whoami)"
-write-output "Current Date and Time: $(Get-Date)"
+Write-Output "Current Date and Time: $(Get-Date)"
 Write-Output ""
 
 # Hostname and Domain
@@ -71,6 +71,7 @@ Get-LocalGroup | ForEach-Object {
     } catch {
     }
 }
+Write-Output ""
 
 # Installed Applications
 Write-Output "=== Installed Applications ==="
